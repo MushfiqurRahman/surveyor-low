@@ -1,0 +1,12 @@
+﻿1. SMS Format: PTR br_code consumer_name consumer_mobile_no age adc occupation_code brand_code sms_count
+
+Issues:
+1. Add brands table
+2. Brands has relation with Surveys table. Surveys hasMany brands
+3. Report generation with brand filtering
+4. Report exportation with brand
+5. Large export is causing pc-hang
+6. Now sms keyword is PTR rather BR
+7. Same mobile can send several sms
+8. Dashboard form submit shows nothing if database becomes large
+
