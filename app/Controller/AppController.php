@@ -154,5 +154,7 @@ class AppController extends Controller {
                 $this->request->data['Feedback']['got_ptr'] = $this->request->params['named']['got_ptr'];
             }
         } 
-    }    
+    } 
+    
+    //just to test the git process
 }
