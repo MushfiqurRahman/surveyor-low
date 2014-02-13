@@ -15,7 +15,3 @@
     echo ' | '.$this->Html->link('Import Feedback Target',array('controller' => 'feedbacks','action' => 'import_feedback_target'));
     echo ' | '.$this->Html->link('Import Feedback',array('controller' => 'feedbacks','action' => 'import_feedback'));
 ?>
-    
-    
-    
-    

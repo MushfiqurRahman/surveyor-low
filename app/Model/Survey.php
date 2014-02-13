@@ -133,7 +133,7 @@ class Survey extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'adc' => array(
+		'brand_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -200,13 +200,13 @@ class Survey extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-//		'Age' => array(
-//			'className' => 'Age',
-//			'foreignKey' => 'age_id',
-//			'conditions' => '',
-//			'fields' => '',
-//			'order' => ''
-//		),
+		'Brand' => array(
+			'className' => 'Brand',
+			'foreignKey' => 'brand_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Occupation' => array(
 			'className' => 'Occupation',
 			'foreignKey' => 'occupation_id',
@@ -256,7 +256,8 @@ class Survey extends AppModel {
                                         'fields' => array('title'),
                                         'Region' => array('fields' => array('title')))),
                         ),
-                    'Occupation' => array('title')
+                    'Occupation' => array('title'),
+                    'Brand' => array('title')
                 );
             }else{                
                 $conditions = array();
@@ -277,7 +278,8 @@ class Survey extends AppModel {
                                         'fields' => array('title'),
                                         'Region' => array('fields' => array('title')))),
                         ),
-                    'Occupation' => array('title')
+                    'Occupation' => array('title'),
+                    'Brand' => array('title')
                 );
             }
         }
@@ -316,13 +318,14 @@ class Survey extends AppModel {
                     $conditions[]['age <='] = $limits['upper'];
                 }                
             }
-            if( isset($data['adc']) && !empty($data['adc']) ){
-                $limits = $this->_get_limits($data['adc']);
-                $conditions[]['adc >='] = $limits['lower'];
-                if( isset($limits['upper']) ){
-                    $conditions[]['adc <='] = $limits['upper'];
-                }
-            }
+            //maybe the following conditions would be brand
+//            if( isset($data['adc']) && !empty($data['adc']) ){
+//                $limits = $this->_get_limits($data['adc']);
+//                $conditions[]['adc >='] = $limits['lower'];
+//                if( isset($limits['upper']) ){
+//                    $conditions[]['adc <='] = $limits['upper'];
+//                }
+//            }
             return $conditions;
         }
         

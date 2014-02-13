@@ -121,14 +121,13 @@
     </div>
 
                     <div class="control-group">
-    <label class="control-label">ADC</label>
+    <label class="control-label">Brand</label>
     <div class="controls">
-        <select class="span6 m-wrap" name="adc" tabindex="1">
+        <select class="span6 m-wrap" name="brand" tabindex="1">
             <?php
-                $options = array('0' => 'Any','1.5' => '1 - 5','6.8' => '6 - 8', '9.11' => '9 - 11', '12' => '11+');
-                foreach($options as $k => $op){
+                foreach($brands as $k => $op){
                     echo '<option value="'.$k.'"';
-                    echo isset($this->data['adc']) && $this->data['adc']==$k ? 'selected' : '';
+                    echo isset($this->data['brand_id']) && $this->data['brand_id']==$k ? 'selected' : '';
                     echo ' />'.$op;
                 }
             ?>
@@ -213,9 +212,9 @@
                                                     <th class="hidden-phone">SUP Name</th>
                                                     <th class="hidden-phone">Consumer Name</th>
                                                     <th class="hidden-phone">Phone No</th>
-                                                    <th class="hidden-phone">AGE</th>
-                                                    <th class="hidden-phone">ADC</th>
+                                                    <th class="hidden-phone">AGE</th>                                                    
                                                     <th class="hidden-phone">Occupation</th>
+                                                    <th class="hidden-phone">Brand</th>
                                                     <th class="hidden-phone">Date</th>
                                                 </tr>
                                             </thead>
@@ -235,9 +234,9 @@
                                                 <td class="hidden-phone"><?php echo $srv['Representative']['superviser_name'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Survey']['name'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Survey']['phone'];?></td>
-                                                <td class="center hidden-phone"><?php echo $srv['Survey']['age'];?></td>
-                                                <td class="hidden-phone"><?php echo $srv['Survey']['adc'];?></td>
+                                                <td class="center hidden-phone"><?php echo $srv['Survey']['age'];?></td>                                                
                                                 <td class="hidden-phone"><?php echo $srv['Occupation']['title'];?></td>
+                                                <td class="hidden-phone"><?php echo $srv['Brand']['title'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Survey']['created'];?></td>
                                             </tr>
 
