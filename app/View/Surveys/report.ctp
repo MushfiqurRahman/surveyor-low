@@ -123,7 +123,11 @@
                     <div class="control-group">
     <label class="control-label">Brand</label>
     <div class="controls">
-        <select class="span6 m-wrap" name="brand" tabindex="1">
+        <?php echo $this->Form->input('brand_id',array('type' => 'select', 'class' => 'span6 m-wrap',
+                'options' => $brands, 'empty' => 'Any', 'label' => false));
+        ?>
+    
+<!--        <select class="span6 m-wrap" name="brand" tabindex="1">
             <?php
                 foreach($brands as $k => $op){
                     echo '<option value="'.$k.'"';
@@ -131,7 +135,7 @@
                     echo ' />'.$op;
                 }
             ?>
-        </select>
+        </select>-->
     </div>
     </div>
 
@@ -166,8 +170,11 @@
             if( isset($this->data['age_limit']) ){
                 $url_params['age_limit'] = $this->data['age_limit'];
             }
-            if( isset($this->data['adc']) ){
-                $url_params['adc'] = $this->data['adc'];
+//            if( isset($this->data['adc']) ){
+//                $url_params['adc'] = $this->data['adc'];
+//            }
+            if( isset($this->data['brand_id']) ){
+                $url_params['brand_id'] = $this->data['brand_id'];
             }
             $this->Paginator->options(array('url' => $url_params));            
         ?>
@@ -209,6 +216,7 @@
                                                     <th class="hidden-phone">Area</th>
                                                     <th class="hidden-phone">House</th>
                                                     <th class="hidden-phone">BR Name</th>
+                                                    <th class="hidden-phone">BR Code</th>
                                                     <th class="hidden-phone">SUP Name</th>
                                                     <th class="hidden-phone">Consumer Name</th>
                                                     <th class="hidden-phone">Phone No</th>
@@ -231,6 +239,7 @@
                                                 <td class="hidden-phone"><?php echo $srv['Representative']['House']['Area']['title'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Representative']['House']['title'];?></td>
                                                 <td class="center hidden-phone"><?php echo $srv['Representative']['name'];?></td>
+                                                <td class="center hidden-phone"><?php echo $srv['Representative']['br_code'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Representative']['superviser_name'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Survey']['name'];?></td>
                                                 <td class="hidden-phone"><?php echo $srv['Survey']['phone'];?></td>
@@ -269,7 +278,8 @@
                         <input type="hidden" name="data[House][id]" value="<?php echo isset($this->data['House']['id']) ? $this->data['House']['id'] : '';?>"/>
                         <input name="start_date" type="hidden" value="<?php echo isset($this->data['start_date']) ? $this->data['start_date'] : '';?>" />
                         <input name="end_date" type="hidden" value="<?php echo isset($this->data['end_date']) ? $this->data['end_date'] : '';?>" />   
-                        <input type="hidden" name="adc" value="<?php echo isset($this->data['adc']) ? $this->data['adc']: '';?>"/>
+<!--                        <input type="hidden" name="adc" value="<?php //echo isset($this->data['adc']) ? $this->data['adc']: '';?>"/>-->
+                        <input type="hidden" name="brand_id" value="<?php echo isset($this->data['brand_id']) ? $this->data['brand_id']: '';?>"/>
                         <input type="hidden" name="age_limit" value="<?php echo isset($this->data['age_limit']) ? $this->data['age_limit']: 0;?>"/>
                         <input type="hidden" name="occupation_id" value="<?php echo isset($this->data['occupation_id']) ? $this->data['occupation_id']: '';?>"/>                        
                         <input type="submit" name="export_report" value="Export"/>

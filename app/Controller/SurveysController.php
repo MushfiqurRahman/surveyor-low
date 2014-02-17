@@ -93,6 +93,7 @@ class SurveysController extends AppController {
             
             $this->set('houses', $houseList);
             $this->set('occupations', $this->Survey->Occupation->find('list'));
+            $this->set('brands', $this->Survey->Brand->find('list'));
             $this->set('Surveys', $Surveys);
         }
         

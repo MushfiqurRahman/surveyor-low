@@ -83,3 +83,9 @@
 8801914825528 Sorry! This consumer has already been contacted.	2013-08-30 12:04 AM
 8801914825528 Sorry! This consumer has already been contacted.	2013-08-30 12:07 AM
 8801914825528 Thank you! Your message have been received.	2013-08-30 12:08 AM
+8801675832989 Your SMS format is wrong, plesae try again with right format.	2014-02-14 09:54 AM
+8801675832989 Thank you! Your message have been received.	2014-02-14 09:54 AM
+8801675832989 Thank you! Your message have been updated.	2014-02-14 09:55 AM
+8801675832989 Sorry! This consumer has already been contacted.	2014-02-14 10:03 AM
+8801675832989 Thank you! Your message have been received.	2014-02-14 10:12 AM
+8801675832989 Thank you! Your message have been updated.	2014-02-14 10:14 AM

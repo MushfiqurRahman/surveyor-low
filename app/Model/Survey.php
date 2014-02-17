@@ -249,7 +249,7 @@ class Survey extends AppModel {
             if( !$is_feedback ){
                 return array(
                     'Representative' => array(
-                        'fields' => array('name','superviser_name'),
+                        'fields' => array('name','superviser_name', 'br_code'),
                         'House' => array(
                                     'fields' => array('title'),
                                     'Area' => array(
@@ -326,6 +326,9 @@ class Survey extends AppModel {
 //                    $conditions[]['adc <='] = $limits['upper'];
 //                }
 //            }
+            if( isset($data['brand_id']) && !empty($data['brand_id']) ){
+                $conditions[]['Survey.brand_id'] = $data['brand_id'];
+            }
             return $conditions;
         }
         
@@ -378,12 +381,14 @@ class Survey extends AppModel {
                 $formatted[$i]['area'] = $srv['Representative']['House']['Area']['title'];
                 $formatted[$i]['house'] = $srv['Representative']['House']['title'];
                 $formatted[$i]['br_name'] = $srv['Representative']['name'];
+                $formatted[$i]['br_code'] = $srv['Representative']['br_code'];
                 $formatted[$i]['sup_name'] = $srv['Representative']['superviser_name'];
                 $formatted[$i]['customer_name'] = $srv['Survey']['name'];
                 $formatted[$i]['phone_no'] = $srv['Survey']['phone'];
                 $formatted[$i]['age'] = $srv['Survey']['age'];
-                $formatted[$i]['adc'] = $srv['Survey']['adc'];
+                //$formatted[$i]['adc'] = $srv['Survey']['adc'];                
                 $formatted[$i]['occupation'] = $srv['Occupation']['title'];
+                $formatted[$i]['brand'] = $srv['Brand']['title'];
                 $formatted[$i]['date'] = date('Y-m-d',strtotime($srv['Survey']['created']));
                 $i++;
             }

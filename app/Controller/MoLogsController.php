@@ -16,7 +16,7 @@ App::uses('AppController', 'Controller');
 class MoLogsController extends AppController{
     //put your code here    
     
-    var $keywords = array('BR');
+    var $keywords = array('PTR');
     var $occupations = array();
     
     public function beforeFilter(){
@@ -26,6 +26,10 @@ class MoLogsController extends AppController{
         $this->loadModel('Occupation');
         $this->Occupation->recursive = -1;
         $this->occupations = $this->Occupation->find('list', array('fields' => array('id','code')));
+        
+        $this->loadModel('Brand');
+        $this->Brand->recursive = -1;
+        $this->brands = $this->Brand->find('list', array('fields' => array('id','code')));
         //pr($this->occupations);exit;
     }
     
@@ -150,12 +154,20 @@ class MoLogsController extends AppController{
                 $data['Survey']['survey_counter'] = $survey_counter;
             }
         }
+        
+        //checking Age
+        if( !is_numeric($params[4]) ){
+            $data['error'] = 'Sorry! Invalid Age';
+            return $data;
+        }else{
+            $data['Survey']['age'] = $params[4];
+        }
                         
         //checking occupations code       
         $valid = false;
         $occp_id = 0;
         foreach($this->occupations as $k => $ocp ){
-            if( $ocp == $params[6] ){
+            if( $ocp == $params[5] ){
                 $valid = true;
                 $occp_id = $k;
                 break;
@@ -168,13 +180,21 @@ class MoLogsController extends AppController{
             $data['Survey']['occupation_id'] = $occp_id;
         }
         
-        //checking ADC and Age
-        if( !is_numeric($params[5]) || !is_numeric($params[4]) ){
-            $data['error'] = 'Sorry! Invalid Age or ADC';
+        //checking brand code       
+        $valid = false;
+        $brnd_id = 0;
+        foreach($this->brands as $k => $br ){
+            if( $br == $params[6] ){
+                $valid = true;
+                $brnd_id = $k;
+                break;
+            }
+        }
+        if( !$valid ){
+            $data['error'] = 'Sorry! Invalid Brand code!';
             return $data;
         }else{
-            $data['Survey']['age'] = $params[4];
-            $data['Survey']['adc'] = $params[5];
+            $data['Survey']['brand_id'] = $brnd_id;
         }
         
         //check mobile no
@@ -207,16 +227,18 @@ class MoLogsController extends AppController{
 
         if( count($res)>0 ){
             return $res;
-        }else{
-            //checking for mobile number duplicacy
-            $res = $this->MoLog->query('SELECT surveys.id, surveys.survey_counter FROM surveys '.
-                        'WHERE campaign_id='.$this->current_campaign_detail['Campaign']['id'].
-                        ' AND representative_id = '.$repId. ' AND phone="'.$customer_phone_no.'"');
-            if( count($res)>0 ){
-                $res['error'] = 'Sorry! This consumer has already been contacted.';
-                return $res;
-            }
         }
+        //In this version currently mobile number duplicacy allowed
+//        else{
+//            //checking for mobile number duplicacy
+//            $res = $this->MoLog->query('SELECT surveys.id, surveys.survey_counter FROM surveys '.
+//                        'WHERE campaign_id='.$this->current_campaign_detail['Campaign']['id'].
+//                        ' AND representative_id = '.$repId. ' AND phone="'.$customer_phone_no.'"');
+//            if( count($res)>0 ){
+//                $res['error'] = 'Sorry! This consumer has already been contacted.';
+//                return $res;
+//            }
+//        }
         return false;
     }
     
@@ -235,7 +257,7 @@ class MoLogsController extends AppController{
         $errorFound = true;
         $ttl_msg_part = count($processed['params']);
 
-        if( $processed['params'][0]!='BR' || !is_numeric($processed['params'][$ttl_msg_part-1]) || 
+        if( $processed['params'][0]!='PTR' || !is_numeric($processed['params'][$ttl_msg_part-1]) || 
             $ttl_msg_part != 8) {
             
             $error = "Your SMS format is wrong, plesae try again with right format.";            
@@ -245,15 +267,10 @@ class MoLogsController extends AppController{
             $repId = $this->MoLog->check_rep_br_code( $processed['params'][1]);
 
             if( !is_array($repId) ){
-                $error = 'Invalid BR code! Please try again with valid code.';                    
+                $error = 'Invalid PTR code! Please try again with valid code.';                    
             }else{
                 $this->loadModel('Survey');
-
-//                $res = $this->MoLog->query('SELECT surveys.id, surveys.survey_counter FROM surveys '.
-//                        'WHERE representative_id='.$repId[0]['representatives']['id'].
-//                        ' AND campaign_id='.$this->current_campaign_detail['Campaign']['id'].
-//                        ' AND phone="'.$processed['params'][3].'"');
-
+                
                 $res = $this->_is_update($repId[0]['representatives']['id'], $processed['params'][3], $processed['params'][7]);
                 
                 if( isset($res['error']) ){

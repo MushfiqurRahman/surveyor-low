@@ -140,8 +140,11 @@ class AppController extends Controller {
             if( isset($this->request->params['named']['end_date']) ){
                 $this->request->data['end_date'] = $this->request->params['named']['end_date'];
             }
-            if( isset($this->request->params['named']['adc']) ){
-                $this->request->data['adc'] = $this->request->params['named']['adc'];
+//            if( isset($this->request->params['named']['adc']) ){
+//                $this->request->data['adc'] = $this->request->params['named']['adc'];
+//            }
+            if( isset($this->request->params['named']['brand_id']) ){
+                $this->request->data['brand_id'] = $this->request->params['named']['brand_id'];
             }
             if( isset($this->request->params['named']['occupation_id']) ){
                 $this->request->data['occupation_id'] = $this->request->params['named']['occupation_id'];
