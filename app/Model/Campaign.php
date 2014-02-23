@@ -158,6 +158,8 @@ class Campaign extends AppModel {
                     'house_id' => $house_ids),
                 'recursive' => -1));
             
+            //$this->log(print_r($campDetails, true),'error');
+            
             $achievements = array();
             $total_target = $total_ach = 0;
             foreach( $campDetails as $cmp ){

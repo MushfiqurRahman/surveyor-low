@@ -130,7 +130,7 @@ class MoLogsController extends AppController{
         foreach($surv_detail as $k => $v ){
             $data['Survey'][$k] = $v;
         }        
-        //echo '<pre>';print_r($data);       
+        //echo '<pre>';print_r($data);exit;
         
         if( !$survey_id ){
             $this->Survey->create();
@@ -265,6 +265,8 @@ class MoLogsController extends AppController{
             $error = 'Sorry! Your mobile number is invalid.';
         }else{                           
             $repId = $this->MoLog->check_rep_br_code( $processed['params'][1]);
+            
+            //pr($repId);exit;
 
             if( !is_array($repId) ){
                 $error = 'Invalid PTR code! Please try again with valid code.';                    
@@ -291,6 +293,7 @@ class MoLogsController extends AppController{
                 }
                 else {
                     $survey_detail = $this->_format_survey($processed['params'], null, $processed['params'][ $ttl_msg_part - 1 ], $processed['lastMoLogId']);
+                    
                     if( isset($survey_detail['error']) ){                    
                         $error = $survey_detail['error'];
                     }else{                            

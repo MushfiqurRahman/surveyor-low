@@ -70,8 +70,10 @@ class ExcelHelper extends AppHelper {
         header('Cache-Control: max-age=0');
         
         $objWriter = new PHPExcel_Writer_Excel5($this->xls);
-        $objWriter->setTempDir(TMP);
+        $objWriter->setPreCalculateFormulas(false);
+        $objWriter->setTempDir(TMP);        
         $objWriter->save('php://output');
+        //echo "Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB";
     }
 }
 ?>

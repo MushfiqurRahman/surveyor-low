@@ -80,6 +80,8 @@ class AppController extends Controller {
                 $this->current_campaign_detail['Campaign']['id'],
                 $this->current_campaign_detail['Campaign']['start_date'],
                 date('Y-m-d',time())));
+        
+        //pr($this->current_campaign_detail);
                 
         $this->set('current_campaign_detail',$this->current_campaign_detail);
     }
