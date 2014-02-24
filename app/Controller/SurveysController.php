@@ -101,9 +101,9 @@ class SurveysController extends AppController {
          * @desc Export report in xlsx file 
          */
         public function export_report(){
-            //$this->layout = 'ajax';        
+            $this->layout = 'ajax';        
             
-            ini_set('memory_limit', '1024M');
+            ini_set('memory_limit', '2024M');
             
             if( !empty($this->request->data) ){
                 
@@ -117,19 +117,7 @@ class SurveysController extends AppController {
 
                 $SurveyIds = $this->Survey->find('list',array('fields' => 'id','conditions' => 
                     array('Survey.campaign_id' => $this->current_campaign_detail['Campaign']['id'],
-                        'Survey.house_id' => $houseIds)));     
-                
-                
-
-//                $this->Survey->Behaviors->load('Containable');
-//
-//                $Surveys = $this->Survey->find('all', array(
-//                    'contain' => $this->Survey->get_contain_array(),
-//                    'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),
-//                    'order' => array('Survey.created' => 'DESC')
-//                ));    
-                
-                
+                        'Survey.house_id' => $houseIds)));    
                 
                 $this->Survey->unbindModel(array('belongsTo' => 
                     array('Campaign','MoLog'),
@@ -142,18 +130,9 @@ class SurveysController extends AppController {
                         'House.title','House.area_id'),
                     'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),
                     'order' => array('Survey.created' => 'DESC'),      
-                    //'limit' => 10
-                )); 
-                //if( !empty($Surveys) ){
-                    $Surveys = $this->Survey->format_for_export($Surveys);
-                    
-                    
-//                }else{
-//                    $Surveys[0]['Survey']['no_data_found'] = "No data found";
-//                }
-                
-                    //echo (memory_get_peak_usage(true) / 1024 /1024). ' MB';exit;
-                $this->set('surveys',$Surveys);                
+                ));                 
+                $Surveys = $this->Survey->format_for_export($Surveys);
+                $this->set('surveys',$Surveys); 
             }
         }        
         

@@ -242,6 +242,17 @@ class MoLogsController extends AppController{
         return false;
     }
     
+    //check whether the received sms is in campaigns working hours or not
+    protected function _is_in_working_hours(){
+        $current_hour_min = date('H:i');
+        
+        if( strcmp($this->current_campaign_detail['Campaign']['start_time'], $current_hour_min) <=0 &&
+            strcmp($this->current_campaign_detail['Campaign']['end_time'], $current_hour_min)>=0 ){
+            return true;
+        }
+        return false;
+    }
+    
         
     /**
      * This processes add and update sales request
@@ -253,59 +264,65 @@ class MoLogsController extends AppController{
         $this->layout = $this->autoRender = false;
         $processed = $this->_processing();
         //print_r($processed);
-        
         $errorFound = true;
-        $ttl_msg_part = count($processed['params']);
+        
+        //check whether the received message is sent during campaign time or not
+        if( !$this->_is_in_working_hours() ){
+            $error = 'Campaign has been finished for today. Please try again tomorrow within campaign time ('.$this->current_campaign_detail['Campaign']['start_time'].' to '.
+                    $this->current_campaign_detail['Campaign']['end_time'].')';
+        }else{
+            $ttl_msg_part = count($processed['params']);
 
-        if( $processed['params'][0]!='PTR' || !is_numeric($processed['params'][$ttl_msg_part-1]) || 
-            $ttl_msg_part != 8) {
-            
-            $error = "Your SMS format is wrong, plesae try again with right format.";            
-        }else if( strlen($processed['mobile_number']) <13 || strlen($processed['mobile_number'])>13 ){
-            $error = 'Sorry! Your mobile number is invalid.';
-        }else{                           
-            $repId = $this->MoLog->check_rep_br_code( $processed['params'][1]);
-            
-            //pr($repId);exit;
+            if( $processed['params'][0]!='PTR' || !is_numeric($processed['params'][$ttl_msg_part-1]) || 
+                $ttl_msg_part != 8) {
 
-            if( !is_array($repId) ){
-                $error = 'Invalid PTR code! Please try again with valid code.';                    
-            }else{
-                $this->loadModel('Survey');
-                
-                $res = $this->_is_update($repId[0]['representatives']['id'], $processed['params'][3], $processed['params'][7]);
-                
-                if( isset($res['error']) ){
-                    $error = $res['error'];
-                }else if(count($res)>0 && $res!=false) { 
-                    $survey_detail = $this->_format_survey($processed['params'], $res[0]['surveys']['id'], $processed['params'][ $ttl_msg_part - 1 ], $processed['lastMoLogId'], $res);
+                $error = "Your SMS format is wrong, plesae try again with right format.";            
+            }else if( strlen($processed['mobile_number']) <13 || strlen($processed['mobile_number'])>13 ){
+                $error = 'Sorry! Your mobile number is invalid.';
+            }else{                           
+                $repId = $this->MoLog->check_rep_br_code( $processed['params'][1]);
 
-                    if( isset($survey_detail['error']) ){   
-                        $error = $survey_detail['error'];
-                    }else{
-                        $this->_save_surveys($repId[0]['representatives']['id'], $repId[0]['representatives']['house_id'],
-                                $processed['mobile_number'], $processed['params'][$ttl_msg_part-1], $processed['created'], 
-                                $survey_detail['Survey'], $res[0]['surveys']['id']);   
-                        
-                        $errorFound = false;
-                        $msg = 'Thank you! Your message have been updated.';
+                //pr($repId);exit;
+
+                if( !is_array($repId) ){
+                    $error = 'Invalid PTR code! Please try again with valid code.';                    
+                }else{
+                    $this->loadModel('Survey');
+
+                    $res = $this->_is_update($repId[0]['representatives']['id'], $processed['params'][3], $processed['params'][7]);
+
+                    if( isset($res['error']) ){
+                        $error = $res['error'];
+                    }else if(count($res)>0 && $res!=false) { 
+                        $survey_detail = $this->_format_survey($processed['params'], $res[0]['surveys']['id'], $processed['params'][ $ttl_msg_part - 1 ], $processed['lastMoLogId'], $res);
+
+                        if( isset($survey_detail['error']) ){   
+                            $error = $survey_detail['error'];
+                        }else{
+                            $this->_save_surveys($repId[0]['representatives']['id'], $repId[0]['representatives']['house_id'],
+                                    $processed['mobile_number'], $processed['params'][$ttl_msg_part-1], $processed['created'], 
+                                    $survey_detail['Survey'], $res[0]['surveys']['id']);   
+
+                            $errorFound = false;
+                            $msg = 'Thank you! Your message have been updated.';
+                        }
                     }
-                }
-                else {
-                    $survey_detail = $this->_format_survey($processed['params'], null, $processed['params'][ $ttl_msg_part - 1 ], $processed['lastMoLogId']);
-                    
-                    if( isset($survey_detail['error']) ){                    
-                        $error = $survey_detail['error'];
-                    }else{                            
-                        $this->_save_surveys($repId[0]['representatives']['id'], $repId[0]['representatives']['house_id'],
-                                $processed['mobile_number'], $processed['params'][$ttl_msg_part-1], $processed['created'],
-                                $survey_detail['Survey']);//                    
+                    else {
+                        $survey_detail = $this->_format_survey($processed['params'], null, $processed['params'][ $ttl_msg_part - 1 ], $processed['lastMoLogId']);
 
-                        $errorFound = false;
-                        $msg = 'Thank you! Your message have been received.';
-                        
-                        $this->loadModel('Achievement');
-                        $this->Achievement->increment_chievement($repId[0]['representatives']['house_id'], $this->current_campaign_detail['Campaign']['id']);
+                        if( isset($survey_detail['error']) ){                    
+                            $error = $survey_detail['error'];
+                        }else{                            
+                            $this->_save_surveys($repId[0]['representatives']['id'], $repId[0]['representatives']['house_id'],
+                                    $processed['mobile_number'], $processed['params'][$ttl_msg_part-1], $processed['created'],
+                                    $survey_detail['Survey']);//                    
+
+                            $errorFound = false;
+                            $msg = 'Thank you! Your message have been received.';
+
+                            $this->loadModel('Achievement');
+                            $this->Achievement->increment_chievement($repId[0]['representatives']['house_id'], $this->current_campaign_detail['Campaign']['id']);
+                        }
                     }
                 }
             }

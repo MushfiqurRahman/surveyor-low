@@ -65,13 +65,16 @@ class ExcelHelper extends AppHelper {
     }
             
     function _output($title) {
-        header("Content-type: application/vnd.ms-excel"); 
-        header('Content-Disposition: attachment;filename="'.$title.'.xls"');
+        //header("Content-type: application/vnd.ms-excel"); 
+        //header('Content-Disposition: attachment;filename="'.$title.'.xls"');
+        header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); 
+        header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
         header('Cache-Control: max-age=0');
         
-        $objWriter = new PHPExcel_Writer_Excel5($this->xls);
+        //$objWriter = new PHPExcel_Writer_Excel5($this->xls);
+        $objWriter = new PHPExcel_Writer_Excel2007($this->xls);
         $objWriter->setPreCalculateFormulas(false);
-        $objWriter->setTempDir(TMP);        
+        //$objWriter->setTempDir(TMP);        
         $objWriter->save('php://output');
         //echo "Peak memory usage: " . (memory_get_peak_usage(true) / 1024 / 1024) . " MB";
     }

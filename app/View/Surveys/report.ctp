@@ -282,7 +282,8 @@
                         <input type="hidden" name="brand_id" value="<?php echo isset($this->data['brand_id']) ? $this->data['brand_id']: '';?>"/>
                         <input type="hidden" name="age_limit" value="<?php echo isset($this->data['age_limit']) ? $this->data['age_limit']: 0;?>"/>
                         <input type="hidden" name="occupation_id" value="<?php echo isset($this->data['occupation_id']) ? $this->data['occupation_id']: '';?>"/>                        
-                        <input type="submit" name="export_report" value="Export"/>
+                        <input type="submit" name="export_report" value="Export as Excel"/>
+                        
                     </form>
 
                             <!-- END MAIN CONTENT-->
