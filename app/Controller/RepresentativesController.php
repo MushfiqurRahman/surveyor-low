@@ -199,4 +199,22 @@ class RepresentativesController extends AppController {
                 }
             }
         }
+        
+        public function search(){
+            if( $this->request->is('post') && $this->request->data['Representative']['br_code'] ){
+                
+                //pr($this->data);exit;
+                $this->Representative->Behaviors->load('Containable');
+                $representative = $this->Representative->find('first',array('contain' => array('House' => array('fields' => array('id','title')),
+                    'Mobile' => array('fields' => array('mobile_no'))),
+                    'conditions' => array('br_code' => $this->data['Representative']['br_code'])));
+                
+                if( $representative ){
+                    //pr($representative);
+                    $this->set('representative', $representative);
+                }else{
+                    $this->Session->setFlash('Representative not found! Invalid BR Code.');
+                }
+            }
+        }
 }
