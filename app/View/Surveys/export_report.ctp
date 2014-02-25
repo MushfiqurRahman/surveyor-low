@@ -26,7 +26,7 @@
     header("Content-Type: application/force-download");
     header("Content-Type: application/octet-stream");
     header("Content-Type: application/download");;
-    header("Content-Disposition: attachment;filename=exported_reported.xls");
+    header("Content-Disposition: attachment;filename=exported_report.xls");
     header("Content-Transfer-Encoding: binary ");
     xlsBOF();
     

@@ -216,6 +216,12 @@ class CampaignsController extends AppController {
                 
                 $this->request->data['Campaign']['start_time'] = $this->request->data['Campaign']['start_time_hour'] .':'. $this->request->data['Campaign']['start_time_min'];
                 $this->request->data['Campaign']['end_time'] = $this->request->data['Campaign']['end_time_hour'] .':'. $this->request->data['Campaign']['end_time_min'];
+                
+                unset($this->request->data['Campaign']['start_time_hour']);
+                unset($this->request->data['Campaign']['start_time_min']);
+                unset($this->request->data['Campaign']['end_time_hour']);
+                unset($this->request->data['Campaign']['end_time_min']);
+                
                 if( $this->Campaign->save($this->request->data) ){
                     $this->Session->setFlash(__('Time has been set'));
                     $this->redirect(array('action' => 'index'));
@@ -228,9 +234,9 @@ class CampaignsController extends AppController {
             if( !empty($this->request->data) ){
                 
                 $this->request->data['Campaign']['start_time_hour'] = substr($this->data['Campaign']['start_time'], 0, 2);
-                $this->request->data['Campaign']['start_time_min'] = substr($this->data['Campaign']['start_time'], 2, 2);
+                $this->request->data['Campaign']['start_time_min'] = substr($this->data['Campaign']['start_time'], 3, 2);
                 $this->request->data['Campaign']['end_time_hour'] = substr($this->data['Campaign']['end_time'], 0, 2);
-                $this->request->data['Campaign']['end_time_min'] = substr($this->data['Campaign']['end_time'], 2, 2);
+                $this->request->data['Campaign']['end_time_min'] = substr($this->data['Campaign']['end_time'], 3, 2);
             }
         }
 }

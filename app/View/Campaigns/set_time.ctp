@@ -4,6 +4,7 @@
 		<legend><?php echo __('Set Campaign Time (24 Hrs format)'); ?></legend>
                  <input name="data[Campaign][id]" type="hidden" value="<?php echo $this->data['Campaign']['id'];?>"/>   
                  <?php
+                 //pr($this->data);
                     $housrs = array();
                     for($i=0;$i<24;$i++){
                         $temp = $i<10 ? '0'.$i : $i;
