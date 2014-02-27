@@ -152,10 +152,10 @@ class RepresentativesController extends AppController {
 			$options = array('conditions' => array('Representative.' . $this->Representative->primaryKey => $id),
                             'contain' => array('Mobile' => array('fields' => array('id','mobile_no'))));
                         
-			$this->request->data = $this->Representative->find('first', $options);
+			$this->request->data = $this->Representative->find('first', $options);                       
                         
                         $this->set('ss_id', array($this->Representative->repList_with_mobile($this->request->data['Representative']['house_id'],
-                                's')));
+                                's', $this->request->data['Representative']['superviser_id'])));
 		}
 		$houses = $this->Representative->House->find('list');
 		$this->set(compact('houses'));

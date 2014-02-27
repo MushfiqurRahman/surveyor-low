@@ -3,6 +3,7 @@
 	<fieldset>
 		<legend><?php echo __('Edit SS/SR/TSA'); ?></legend>
 	<?php
+        //pr($ss_id);
 		echo $this->Form->input('id');		
                 if( $this->data['Representative']['superviser_id']>0){
                     echo $this->Form->input('house_id', array('disabled' => 'disabled'));

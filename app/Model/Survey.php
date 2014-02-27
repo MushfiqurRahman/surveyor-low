@@ -288,14 +288,24 @@ class Survey extends AppModel {
          *
          * @return type 
          */
-        public function set_conditions( $surveyIds = null, $data = array(), $is_feedback = false ){
+        //public function set_conditions( $surveyIds = null, $data = array(), $is_feedback = false ){
+        public function set_conditions( $houseIds = null, $data = array(), $is_feedback = false, $campaignId = false ){
             
             $conditions = array();
             
-            if( $surveyIds ){
-                $conditions[]['Survey.id'] = $surveyIds;                
+//            if( $surveyIds ){
+//                $conditions[]['Survey.id'] = $surveyIds;                
+//            }else{
+//                $conditions[]['Survey.id'] = 0;
+//            }
+            
+            if( $campaignId ){
+                $conditions[]['Survey.campaign_id'] = $campaignId;
+            }
+            if( $houseIds ){
+                $conditions[]['Survey.house_id'] = $houseIds;                
             }else{
-                $conditions[]['Survey.id'] = 0;
+                $conditions[]['Survey.house_id'] = 0;
             }
             
             //since Feedback reporting on Feedbacks created date. Not on survey date

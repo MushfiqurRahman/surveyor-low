@@ -69,15 +69,16 @@ class SurveysController extends AppController {
                 $houseIds = $this->Survey->House->id_from_list($houseList);                
             }
             
-            $SurveyIds = $this->Survey->find('list',array('fields' => 'id','conditions' => 
-                array('Survey.campaign_id' => $this->current_campaign_detail['Campaign']['id'],
-                      'Survey.house_id' => $houseIds)));            
-
+//            $SurveyIds = $this->Survey->find('list',array('fields' => 'id','conditions' => 
+//                array('Survey.campaign_id' => $this->current_campaign_detail['Campaign']['id'],
+//                      'Survey.house_id' => $houseIds)));     
+            
             $this->Survey->Behaviors->load('Containable');
 
             $this->paginate = array(
                 'contain' => $this->Survey->get_contain_array(),
-                'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),                                    
+                //'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),                                    
+                'conditions' => $this->Survey->set_conditions($houseIds, $this->request->data, false, $this->current_campaign_detail['Campaign']['id']),                                    
                 'order' => array('Survey.created' => 'DESC'),
                 'limit' => $this->Auth->user('pagination_limit'),
             );                
@@ -115,9 +116,9 @@ class SurveysController extends AppController {
                     $houseIds = $this->Survey->House->id_from_list($houseList);                
                 }
 
-                $SurveyIds = $this->Survey->find('list',array('fields' => 'id','conditions' => 
-                    array('Survey.campaign_id' => $this->current_campaign_detail['Campaign']['id'],
-                        'Survey.house_id' => $houseIds)));    
+//                $SurveyIds = $this->Survey->find('list',array('fields' => 'id','conditions' => 
+//                    array('Survey.campaign_id' => $this->current_campaign_detail['Campaign']['id'],
+//                        'Survey.house_id' => $houseIds)));    
                 
                 $this->Survey->unbindModel(array('belongsTo' => 
                     array('Campaign','MoLog'),
@@ -128,7 +129,8 @@ class SurveysController extends AppController {
                         'brand_id','created', 'Representative.name','Representative.br_code',
                         'Representative.superviser_name','Brand.title','Occupation.title',
                         'House.title','House.area_id'),
-                    'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),
+                    //'conditions' => $this->Survey->set_conditions($SurveyIds, $this->request->data),
+                    'conditions' => $this->Survey->set_conditions($houseIds, $this->request->data, false, $this->current_campaign_detail['Campaign']['id']),
                     'order' => array('Survey.created' => 'DESC'),      
                 ));                 
                 $Surveys = $this->Survey->format_for_export($Surveys);

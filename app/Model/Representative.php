@@ -110,6 +110,23 @@ class Representative extends AppModel {
 	);
         
         /**
+         * 
+         * @param type $houseId
+         * @return type
+         */
+        protected function _get_superviser_ids( $houseId ){
+            $allSupId = $this->query('SELECT DISTINCT superviser_id FROM `representatives` WHERE '.
+                    'house_id='.$houseId.' AND superviser_id>0');
+            $ids = array();
+            if( $allSupId ){
+                foreach($allSupId as $s){
+                    $ids[] = $s['representatives']['superviser_id'];
+                }
+            }
+            return $ids;
+        }
+        
+        /**
          *
          * @param type $houseId
          * @return string 
@@ -118,15 +135,26 @@ class Representative extends AppModel {
             $qry = 'select * from representatives left join mobiles '.
                         'on representatives.id = mobiles.representative_id where representatives.house_id='.
                         $houseId;
+            
+            //fetching supervisers
             if( $rep_type ){
-                $qry .= ' AND representatives.superviser_id=0';
+                if( $ss_id ){
+                    $qry = 'select * from representatives left join mobiles '.
+                        'on representatives.id = mobiles.representative_id where '.
+                        ' representatives.id ='.$ss_id;
+                }else{
+                    $supIds = $this->_get_superviser_ids($houseId);
+                    $qry = 'select * from representatives left join mobiles '.
+                            'on representatives.id = mobiles.representative_id where '.
+                            ' representatives.id IN('.implode(',', $supIds).')';
+                }
             }
-            if( $ss_id ){
+            if( $rep_type==null && $ss_id ){
                 $qry .= ' AND representatives.superviser_id='.$ss_id;
             }
             $res = $this->query($qry);
             
-            //pr($res);exit;
+            //$this->log(print_r($res, true), 'error');
                     
             $repList = array();
 
@@ -139,5 +167,4 @@ class Representative extends AppModel {
             }
             return $repList;
         }
-
 }
